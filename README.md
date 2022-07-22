@@ -1,4 +1,5 @@
 # A vim text object for blocks
+[![Tests](https://github.com/kizza/vim-textobj-block/actions/workflows/tests.yml/badge.svg)](https://github.com/kizza/vim-textobj-block/actions/workflows/tests.yml)
 
 This plugin allows the expression of matching indentation (blocks), in their entirety, or just above-or-below the current lines.
 
