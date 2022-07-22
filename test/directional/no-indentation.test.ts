@@ -1,6 +1,9 @@
 import assert from "assert";
-import {getLines, populateBuffer} from "../helpers/buffer";
-import {withVim} from "../helpers/vim";
+import bootVim, {getBuffer, setBuffer, WithVim} from "nvim-test-js";
+import * as path from "path";
+
+const withVim = (test: WithVim) =>
+  bootVim(test, {vimrc: path.resolve(__dirname, "../", "helpers", "vimrc.vim")})
 
 describe("No indentation", () => {
   describe("downs", () => {
@@ -16,7 +19,7 @@ describe("No indentation", () => {
 
     it("exclusive downs", () =>
       withVim(async nvim => {
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal diJ")')
 
@@ -26,16 +29,16 @@ describe("No indentation", () => {
           "  foo",
           "end",
         ]
-        assert.equal(await getLines(nvim), expected.join("\n"))
+        assert.equal(await getBuffer(nvim), expected.join("\n"))
       }));
 
     it("inclusive downs", () =>
       withVim(async nvim => {
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal daJ")')
 
-        assert.equal(await getLines(nvim), [])
+        assert.equal(await getBuffer(nvim), [])
       }));
   })
 
@@ -52,7 +55,7 @@ describe("No indentation", () => {
 
     it("exclusive ups", () =>
       withVim(async nvim => {
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal diK")')
 
@@ -62,16 +65,16 @@ describe("No indentation", () => {
           "end",
           "",
         ]
-        assert.equal(await getLines(nvim), expected.join("\n"))
+        assert.equal(await getBuffer(nvim), expected.join("\n"))
       }));
 
     it("inclusive ups", () =>
       withVim(async nvim => {
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal daK")')
 
-        assert.equal(await getLines(nvim), [])
+        assert.equal(await getBuffer(nvim), [])
       }));
   })
 
@@ -86,7 +89,7 @@ describe("No indentation", () => {
 
     it("exclusive downs", () =>
       withVim(async nvim => {
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal diJ")')
 
@@ -94,16 +97,16 @@ describe("No indentation", () => {
           "",
           "fourth",
         ]
-        assert.equal(await getLines(nvim), expected.join("\n"))
+        assert.equal(await getBuffer(nvim), expected.join("\n"))
       }));
 
     it("inclusive downs", () =>
       withVim(async nvim => {
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal daJ")')
 
-        assert.equal(await getLines(nvim), [])
+        assert.equal(await getBuffer(nvim), [])
       }));
   })
 })

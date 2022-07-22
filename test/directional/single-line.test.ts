@@ -1,6 +1,9 @@
 import assert from "assert";
-import {getLines, populateBuffer} from "../helpers/buffer";
-import {withVim} from "../helpers/vim";
+import bootVim, {getBuffer, setBuffer, WithVim} from "nvim-test-js";
+import * as path from "path";
+
+const withVim = (test: WithVim) =>
+  bootVim(test, {vimrc: path.resolve(__dirname, "../", "helpers", "vimrc.vim")})
 
 describe("Single line tests", () => {
   describe("single nested line", () => {
@@ -13,7 +16,7 @@ describe("Single line tests", () => {
     ["diJ", "daJ", "diK", "daK"].forEach((binding: string) =>
       it(`deletes it with ${binding}`, () =>
         withVim(async nvim => {
-          await populateBuffer(nvim, buffer, "ruby");
+          await setBuffer(nvim, buffer, "ruby");
 
           await nvim.command(`execute("normal ${binding}")`)
 
@@ -21,7 +24,7 @@ describe("Single line tests", () => {
             "begin",
             "end",
           ]
-          assert.equal(await getLines(nvim), expected.join("\n"))
+          assert.equal(await getBuffer(nvim), expected.join("\n"))
         }))
     );
   })
@@ -38,7 +41,7 @@ describe("Single line tests", () => {
     ["diJ", "daJ", "diK", "daK"].forEach((binding: string) =>
       it(`deletes it with ${binding}`, () =>
         withVim(async nvim => {
-          await populateBuffer(nvim, buffer, "ruby");
+          await setBuffer(nvim, buffer, "ruby");
 
           await nvim.command(`execute("normal ${binding}")`)
 
@@ -48,7 +51,7 @@ describe("Single line tests", () => {
             "end",
             "",
           ]
-          assert.equal(await getLines(nvim), expected.join("\n"))
+          assert.equal(await getBuffer(nvim), expected.join("\n"))
         }))
     );
   })
@@ -67,7 +70,7 @@ describe("Single line tests", () => {
     ["diJ", "diK"].forEach((binding: string) =>
       it(`deletes it with exclusive ${binding}`, () =>
         withVim(async nvim => {
-          await populateBuffer(nvim, buffer, "ruby");
+          await setBuffer(nvim, buffer, "ruby");
 
           await nvim.command(`execute("normal ${binding}")`)
 
@@ -79,14 +82,14 @@ describe("Single line tests", () => {
             "end",
             "  ignore",
           ]
-          assert.equal(await getLines(nvim), expected.join("\n"))
+          assert.equal(await getBuffer(nvim), expected.join("\n"))
         }))
     );
 
     ["daK", "daK"].forEach((binding: string) =>
       it(`deletes it with inclusive ${binding}`, () =>
         withVim(async nvim => {
-          await populateBuffer(nvim, buffer, "ruby");
+          await setBuffer(nvim, buffer, "ruby");
 
           await nvim.command(`execute("normal ${binding}")`)
 
@@ -97,7 +100,7 @@ describe("Single line tests", () => {
             "end",
             "  ignore",
           ]
-          assert.equal(await getLines(nvim), expected.join("\n"))
+          assert.equal(await getBuffer(nvim), expected.join("\n"))
         }))
     );
   })
@@ -110,11 +113,11 @@ describe("Single line tests", () => {
     ["diJ", "daJ", "diK", "daK"].forEach((binding: string) =>
       it(`deletes it with ${binding}`, () =>
         withVim(async nvim => {
-          await populateBuffer(nvim, buffer, "ruby");
+          await setBuffer(nvim, buffer, "ruby");
 
           await nvim.command(`execute("normal ${binding}")`)
 
-          assert.equal(await getLines(nvim), [])
+          assert.equal(await getBuffer(nvim), [])
         }))
     );
   })

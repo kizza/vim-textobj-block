@@ -1,6 +1,9 @@
 import assert from "assert";
-import {getLines, populateBuffer} from "./helpers/buffer";
-import {withVim} from "./helpers/vim";
+import bootVim, {getBuffer, setBuffer, WithVim} from "nvim-test-js";
+import * as path from "path";
+
+const withVim = (test: WithVim) =>
+  bootVim(test, {vimrc: path.resolve(__dirname, "helpers", "vimrc.vim")})
 
 describe("vim-textobj-block", () => {
   describe("consecutive same indent", () => {
@@ -16,7 +19,7 @@ describe("vim-textobj-block", () => {
           "end",
         ]
 
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal diJ")')
 
@@ -26,7 +29,7 @@ describe("vim-textobj-block", () => {
           "  fourth",
           "end",
         ]
-        assert.equal(await getLines(nvim), expected.join("\n"))
+        assert.equal(await getBuffer(nvim), expected.join("\n"))
       }));
 
     it("exclusive ups", () =>
@@ -41,7 +44,7 @@ describe("vim-textobj-block", () => {
           "end",
         ]
 
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal diK")')
 
@@ -51,7 +54,7 @@ describe("vim-textobj-block", () => {
           "",
           "end",
         ]
-        assert.equal(await getLines(nvim), expected.join("\n"))
+        assert.equal(await getBuffer(nvim), expected.join("\n"))
       }));
   });
 
@@ -70,7 +73,7 @@ describe("vim-textobj-block", () => {
           "end",
         ]
 
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal diJ")')
 
@@ -82,7 +85,7 @@ describe("vim-textobj-block", () => {
           "  code",
           "end",
         ]
-        assert.equal(await getLines(nvim), expected.join("\n"))
+        assert.equal(await getBuffer(nvim), expected.join("\n"))
       }));
   });
 
@@ -100,7 +103,7 @@ describe("vim-textobj-block", () => {
           "end",
         ]
 
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal diJ")')
 
@@ -113,7 +116,7 @@ describe("vim-textobj-block", () => {
           "  code",
           "end",
         ]
-        assert.equal(await getLines(nvim), expected.join("\n"))
+        assert.equal(await getBuffer(nvim), expected.join("\n"))
       }));
 
     it("exclusive ups", () =>
@@ -129,7 +132,7 @@ describe("vim-textobj-block", () => {
           "end",
         ]
 
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal diK")')
 
@@ -139,7 +142,7 @@ describe("vim-textobj-block", () => {
           "",
           "end",
         ]
-        assert.equal(await getLines(nvim), expected.join("\n"))
+        assert.equal(await getBuffer(nvim), expected.join("\n"))
       }));
   });
 })

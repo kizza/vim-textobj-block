@@ -1,6 +1,9 @@
 import assert from "assert";
-import {getLines, populateBuffer} from "../helpers/buffer";
-import {withVim} from "../helpers/vim";
+import bootVim, {getBuffer, setBuffer, WithVim} from "nvim-test-js";
+import * as path from "path";
+
+const withVim = (test: WithVim) =>
+  bootVim(test, {vimrc: path.resolve(__dirname, "../", "helpers", "vimrc.vim")})
 
 describe("Basic tests", () => {
   it("loads the test vimrc", () =>
@@ -33,7 +36,7 @@ describe("Basic tests", () => {
 
     it("exclusive downs", () =>
       withVim(async nvim => {
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal diJ")')
 
@@ -45,12 +48,12 @@ describe("Basic tests", () => {
           "  end",
           "end",
         ]
-        assert.equal(await getLines(nvim), expected.join("\n"))
+        assert.equal(await getBuffer(nvim), expected.join("\n"))
       }));
 
     it("inclusive downs", () =>
       withVim(async nvim => {
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal daJ")')
 
@@ -58,7 +61,7 @@ describe("Basic tests", () => {
           "begin",
           "end",
         ]
-        assert.equal(await getLines(nvim), expected.join("\n"))
+        assert.equal(await getBuffer(nvim), expected.join("\n"))
       }));
   });
 
@@ -79,7 +82,7 @@ describe("Basic tests", () => {
 
     it("exclusive ups", () =>
       withVim(async nvim => {
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal diK")')
 
@@ -91,12 +94,12 @@ describe("Basic tests", () => {
           "",
           "end",
         ]
-        assert.equal(await getLines(nvim), expected.join("\n"))
+        assert.equal(await getBuffer(nvim), expected.join("\n"))
       }));
 
     it("inclusive ups", () =>
       withVim(async nvim => {
-        await populateBuffer(nvim, buffer, "ruby");
+        await setBuffer(nvim, buffer, "ruby");
 
         await nvim.command('execute("normal daK")')
 
@@ -104,7 +107,7 @@ describe("Basic tests", () => {
           "begin",
           "end",
         ]
-        assert.equal(await getLines(nvim), expected.join("\n"))
+        assert.equal(await getBuffer(nvim), expected.join("\n"))
       }));
   });
 });
