@@ -1,9 +1,10 @@
 import assert from "assert";
-import bootVim, {getBuffer, setBuffer, WithVim} from "nvim-test-js";
+import {getBuffer, setBuffer, vimRunner} from "nvim-test-js";
 import * as path from "path";
 
-const withVim = (test: WithVim) =>
-  bootVim(test, {vimrc: path.resolve(__dirname, "../", "helpers", "vimrc.vim")})
+const withVim = vimRunner(
+  {vimrc: path.resolve(__dirname, "../", "helpers", "vimrc.vim")}
+)
 
 describe("Single line tests", () => {
   describe("single nested line", () => {
